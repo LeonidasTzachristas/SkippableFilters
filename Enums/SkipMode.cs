@@ -15,7 +15,7 @@ public enum SkipMode
     Always,
     /// <summary>
     /// The skip decision is determined by custom logic implemented in the filter,
-    /// typically by overriding <c>ShouldSkip</c> in the base filter class.
+    /// by overriding <c>ShouldSkip</c> in the base filter class.
     /// </summary>
     Custom
 }
