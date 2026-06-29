@@ -11,8 +11,7 @@ public abstract class AsyncSkippableActionFilter
         : base(skipMode) { }
 
     async Task IAsyncActionFilter.OnActionExecutionAsync(
-        ActionExecutingContext context, 
-        ActionExecutionDelegate next)
+        ActionExecutingContext context, ActionExecutionDelegate next)
     {
         if (SkipExecution(context))
         {
@@ -20,9 +19,9 @@ public abstract class AsyncSkippableActionFilter
             return;
         }
 
-        await OnExecutionAsync(context, next);
+        await this.OnActionExecutionAsync(context, next);
     }
 
-    protected abstract Task OnExecutionAsync(ActionExecutingContext context, 
+    protected abstract Task OnActionExecutionAsync(ActionExecutingContext context, 
         ActionExecutionDelegate next);
 }

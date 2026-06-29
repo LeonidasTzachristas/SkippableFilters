@@ -1,9 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net10.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        
+        <PackageId>SkippableFilters</PackageId>
+        <Version>1.0.1</Version>
+        <Authors>Tzachristas Leonidas</Authors>
+        <Company>Tzachristas Leonidas</Company>
+        <Description>Reusable ASP.NET Core Skippable filters with SkipMode Support</Description>
+        
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://github.com/LeonidasTzachristas/SkippableFilters</RepositoryUrl>
+        
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
     <ItemGroup>

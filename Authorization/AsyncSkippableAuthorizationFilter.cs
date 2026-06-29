@@ -1,41 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc.Filters;
+using SkippableFilters.Core;
 using SkippableFilters.Enums;
 
 namespace SkippableFilters.Authorization;
 
-public abstract class AsyncSkippableAuthorizationFilter : IAsyncAuthorizationFilter
+public abstract class AsyncSkippableAuthorizationFilter 
+    : SkippableFilterBase<AuthorizationFilterContext>, IAsyncAuthorizationFilter
 {
-    protected SkipMode SkipMode { get; }
-
     protected AsyncSkippableAuthorizationFilter(SkipMode skipMode = SkipMode.Never)
-    {
-        SkipMode = skipMode;
-    }
+        :base(skipMode) { }
     
     async Task IAsyncAuthorizationFilter.OnAuthorizationAsync(AuthorizationFilterContext context)
     {
         if (SkipExecution(context))
             return;
-
-        await OnAuthorizeAsync(context);
+        
+        await this.OnAuthorizationAsync(context);
     }
 
-    private bool SkipExecution(AuthorizationFilterContext context)
-    {
-        return SkipMode switch
-        {
-            SkipMode.Never => false,
-            SkipMode.Always => true,
-            SkipMode.Custom => ShouldSkip(context),
-            _ => throw new ArgumentOutOfRangeException()
-        };
-    }
-
-    protected virtual bool ShouldSkip(AuthorizationFilterContext context)
-    {
-        throw new InvalidOperationException(
-            $"{GetType().Name} uses SkipMode.Custom but does not override ShouldSkip().");
-    }
-
-    protected abstract Task OnAuthorizeAsync(AuthorizationFilterContext context);
+    protected abstract Task OnAuthorizationAsync(AuthorizationFilterContext context);
 }

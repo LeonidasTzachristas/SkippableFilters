@@ -7,23 +7,31 @@ namespace SkippableFilters.Action;
 public abstract class SkippableActionFilter 
     : SkippableFilterBase<ActionExecutingContext>, IActionFilter
 {
+    private static readonly object SkipKey = new();
+    
     protected SkippableActionFilter(SkipMode skipMode = SkipMode.Never)
         :base(skipMode) { }
     
     void IActionFilter.OnActionExecuting(ActionExecutingContext context)
     {
         if (SkipExecution(context))
+        {
+            context.HttpContext.Items[SkipKey] = true;
             return;
+        }
         
-        OnExecuting(context);
+        this.OnActionExecuting(context);
     }
 
     void IActionFilter.OnActionExecuted(ActionExecutedContext context)
     {
-        OnExecuted(context);
+        if ((bool?)context.HttpContext.Items[SkipKey] == true)
+            return;
+        
+        this.OnActionExecuted(context);
     }
 
-    protected abstract void OnExecuting(ActionExecutingContext context);
+    protected abstract void OnActionExecuting(ActionExecutingContext context);
     
-    protected virtual void OnExecuted(ActionExecutedContext context) { }
+    protected virtual void OnActionExecuted(ActionExecutedContext context) { }
 }
